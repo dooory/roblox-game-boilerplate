@@ -3,8 +3,8 @@
 ## Code style
 
 - Do not add comments to code. Luau directives such as `--!strict` are allowed.
-- Keep `--!strict` at the top of every Luau file. Run `./scripts/check.ps1` before handing off code changes.
-- Format with StyLua (tabs, 110 columns, double quotes). Never edit generated `Packages/`, `ServerPackages/`, `build/` or `sourcemap.json`, or vendored code in `vendor/`.
+- Run `./scripts/check.ps1` before handing off code changes.
+- Format with StyLua (tabs, 120 columns, double quotes). Never edit generated `Packages/`, `ServerPackages/`, `build/` or `sourcemap.json`, or vendored code in `vendor/`.
 
 ### Naming
 
@@ -119,8 +119,6 @@ src/client/Controllers/CameraController/
 - Non-UI controllers follow the same pattern, for example `CameraController/init.luau` with `Modes.luau` and `Smoothing.luau`.
 
 ```lua
---!strict
-
 local Catalog = require(script.Parent.Catalog)
 local Types = require(script.Parent.Types)
 
@@ -138,8 +136,6 @@ return Purchasing
 ```
 
 ```lua
---!strict
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Packets = require(ReplicatedStorage.Packets)
 local Purchasing = require(script.Purchasing)
@@ -203,8 +199,6 @@ src/client/Controllers/UIController/
 - **Complex client logic** such as a placement preview goes in its own controller, which the screen calls through `context.Controllers`.
 
 ```lua
---!strict
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Trove = require(ReplicatedStorage.Packages.Trove)
 local Types = require(script.Parent.Parent.Types)
@@ -246,8 +240,6 @@ return Hud
 3. Add a `require` to that side's `Registry.luau`, after every system it depends on.
 
 ```lua
---!strict
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Lifecycle = require(ReplicatedStorage.Lifecycle)
 local Packets = require(ReplicatedStorage.Packets)
@@ -303,8 +295,6 @@ Use a component for behaviour attached to many tagged instances (doors, pickups,
 - Server components own authoritative behaviour; client components are presentation only. Destroying the class stops tag tracking but does not stop already running instances, so it is suitable only at shutdown.
 
 ```lua
---!strict
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Component = require(ReplicatedStorage.Packages.Component)
 
