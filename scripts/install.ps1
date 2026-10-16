@@ -1,8 +1,8 @@
 $ErrorActionPreference = 'Stop'
 Push-Location (Split-Path $PSScriptRoot -Parent)
 try {
-    & aftman install
-    if ($LASTEXITCODE -ne 0) { throw 'Aftman install failed' }
+    & rokit install
+    if ($LASTEXITCODE -ne 0) { throw 'Rokit install failed' }
     if (-not (Test-Path -LiteralPath globalTypes.d.luau)) {
         Invoke-WebRequest 'https://raw.githubusercontent.com/JohnnyMorganz/luau-lsp/main/scripts/globalTypes.d.luau' -OutFile globalTypes.d.luau
     }
