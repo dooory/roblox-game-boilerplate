@@ -1,0 +1,10 @@
+__pycache__/
+/*.html
+/icons/
+/stud.png
+/tex/
+/fonts/
+/shots/
+/rbx/luau/
+/rbx/out/*
+!/rbx/out/uploaded.json

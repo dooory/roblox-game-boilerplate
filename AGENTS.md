@@ -1,10 +1,14 @@
 # Game Boilerplate — agent instructions
 
+## Making the game
+
+This file covers how to write the code. What makes the game *good* is in [docs/game-design](docs/game-design/core.md): read `core.md` at the start of every session, and the topic guide it points to before you build that part.
+
 ## Code style
 
 - Do not add comments to code. Luau directives such as `--!strict` are allowed.
 - Run `./scripts/check.ps1` before handing off code changes.
-- Format with StyLua (tabs, 120 columns, double quotes). Never edit generated `Packages/`, `ServerPackages/`, `build/` or `sourcemap.json`, or vendored code in `vendor/`.
+- Format with StyLua (tabs, 120 columns, double quotes). Never edit generated `Packages/`, `ServerPackages/`, `build/`, `sourcemap.json`, `src/client/Controllers/UIController/Looks/` or `src/shared/Config/UIAssets.luau`, or vendored code in `vendor/`.
 
 ### Naming
 
@@ -59,7 +63,7 @@ rojo serve default.project.json --address 127.0.0.1
 | `vendor/Replica` | `ReplicatedStorage.ReplicaClient`, `ReplicatedStorage.ReplicaShared`, `ServerScriptService.ReplicaServer` | Vendored Replica (see Packages) |
 
 - Edit code on disk; Rojo syncs it. Code lives directly in the service roots, with no Client/Server/Shared wrapper folders.
-- Rojo owns mapped folders. Unknown children at service roots are preserved. Workspace, lighting, GUI and other art are edited and saved in Studio, not on disk.
+- Rojo owns mapped folders. Unknown children at service roots are preserved. Workspace, lighting and other art are edited and saved in Studio, not on disk. UI is not authored in Studio: screens are Vide code (see UI).
 - Tag authoring-only content in Workspace (prefab libraries, reference models, anything the game reads from a copy elsewhere) `EditorOnly`. `Bootstrap.server.luau` moves tagged instances into `ServerStorage.EditorOnly` before any system starts, so they stay editable in Studio but are never replicated to players. Never tag something code reads from Workspace.
 - Server-only code (secrets, rules, data) belongs in `src/server`. Everything in `src/shared` is visible to clients.
 - Put tunable constants in `src/shared/Config` as frozen tables, or in server modules if clients must not see them.
@@ -163,7 +167,7 @@ return ShopService
 
 ### UI
 
-Before adding or changing screens, `ScreenGui` instances, `UIController`, or `StarterGui`, read `.agents/skills/roblox-ui/SKILL.md`.
+Before adding or changing screens, `UIController`, Looks, or anything under `UIController/Kit`, read `.agents/skills/roblox-ui/SKILL.md`. Screens are Vide code, not Studio-authored ScreenGuis. For a screen's look (mockups, art, the generated Look), use the `/roblox-ui-maker` skill and read `ui/README.md`.
 
 ### Adding a system
 
@@ -252,6 +256,7 @@ Shared packages are in `ReplicatedStorage.Packages`; server-only ones in `Server
 | `Trove` | Cleaning up connections, instances and threads owned by a system or component. |
 | `Signal` | Custom events between systems. Also used by Packet for `OnServerEvent`/`OnClientEvent`. Prefer `Fire`; Packet uses `FireDeferred`. |
 | `Component` | Tag-driven behaviour; see Components. |
+| `Vide` | All UI. Generated Looks and hand-written Screen modules are built with it; see UI. |
 | `Input` | Client input: `Input.Keyboard.new()`, `Input.Mouse.new()`, `Input.Gamepad.new()`, `Input.Touch.new()`, and `Input.PreferredInput.observe(callback)` to adapt UI to the current device. Create them in a controller's `Start` and `Destroy` them in `Destroy`. |
 | `WaitFor` | Waiting for authored instances with a timeout, such as `WaitFor.Child(parent, "Name", 15)`. It returns a Promise: use `:andThen`/`:catch`, and on failure `warn` with the full path and leave that feature disabled rather than hanging. |
 | `TableUtil` | Table helpers (`Copy`, `Sync`, `Reconcile`, `Map`, `Filter`, `Keys`, `Values`, ...). Use it instead of rewriting common helpers. |

@@ -2,8 +2,13 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Trove = require(ReplicatedStorage.Packages.Trove)
 local WaitFor = require(ReplicatedStorage.Packages.WaitFor)
+local Scale = require(script.Scale)
 local Types = require(script.Types)
+
+local HudOrder = 2
+local ModalOrder = 3
 
 local modules: { [string]: Types.ScreenModule } = {}
 
@@ -12,6 +17,7 @@ local registry: { [string]: any } = {}
 local screens: { [string]: Types.Screen } = {}
 local opened: { [string]: boolean } = {}
 local pending: { any } = {}
+local trove = Trove.new()
 local destroyed = false
 
 function UIController.Init(_self: any, controllers: { [string]: any })
@@ -60,17 +66,20 @@ function UIController.Start(_self: any)
 	for name, module in modules do
 		local promise = WaitFor.Child(Players.LocalPlayer, "PlayerGui", 15)
 			:andThen(function(playerGui: Instance)
-				return WaitFor.Child(playerGui, name, 15)
-			end)
-			:andThen(function(gui: Instance)
 				if destroyed then
 					return
 				end
-				if not gui:IsA("ScreenGui") then
-					error(`{gui:GetFullName()} is a {gui.ClassName}, not a ScreenGui`)
-				end
+				local gui = Instance.new("ScreenGui")
+				gui.Name = name
 				gui.ResetOnSpawn = false
+				gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+				gui.Parent = playerGui
 				local screen = module.new(context, gui)
+				gui.DisplayOrder = if screen.Modal then ModalOrder else HudOrder
+				trove:Connect(gui:GetPropertyChangedSignal("AbsoluteSize"), function()
+					Scale.Fit(gui)
+				end)
+				Scale.Fit(gui)
 				screens[name] = screen
 				if screen.StartsOpen then
 					UIController:Open(name)
@@ -79,11 +88,7 @@ function UIController.Start(_self: any)
 				end
 			end)
 			:catch(function(problem: any)
-				warn(
-					`[UIController] {name} screen disabled; needs a ScreenGui at PlayerGui.{name}: {tostring(
-						problem
-					)}`
-				)
+				warn(`[UIController] {name} screen disabled: {tostring(problem)}`)
 			end)
 		table.insert(pending, promise)
 	end
@@ -91,6 +96,7 @@ end
 
 function UIController.Destroy(_self: any)
 	destroyed = true
+	trove:Clean()
 	for _, promise in pending do
 		promise:cancel()
 	end
