@@ -11,6 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: CompeyDev/setup-rokit@v0.2.1
+      - name: Trust tools
+        run: grep -oP '"\K[^@"]+(?=@)' rokit.toml | xargs -n1 rokit trust
       - name: Install dependencies
         shell: pwsh
         run: ./scripts/install.ps1
