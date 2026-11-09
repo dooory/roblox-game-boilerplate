@@ -4,6 +4,16 @@
 
 This file covers how to write the code. What makes the game *good* is in [docs/game-design](docs/game-design/core.md): read `core.md` at the start of every session, and the topic guide it points to before you build that part.
 
+## Working with a team
+
+Two or more people work in this repo, usually through an agent each. These rules keep their work apart.
+
+- **New person.** If `Packages/` is missing, or the user says they are new, run `./scripts/setup.ps1`, then follow `docs/getting-started.md` with them one step at a time. Do the steps you can; say plainly which ones only they can do. Do not assume they know Git, GitHub or Rojo, and never ask them to type a Git command: run it for them and say what you did in one sentence.
+- **Branches.** Never commit to `master`. Start from the latest `master` (`git switch master && git pull`), make a branch named for the work (`feat/shop-screen`, `fix/data-reload`), commit there, push it, and open a pull request. Commit or push only when the user asks; offer once the work passes `./scripts/check.ps1`. CI runs the same checks on every pull request.
+- **Rojo.** One Rojo connection per place. Each person has their own test place and connects only their own checkout. Start it with `./scripts/dev.ps1`, or `./scripts/dev.ps1 -Port <n>` when another Rojo server is running on the same machine. Do not connect to, or publish from, a place that is not the user's own.
+- **Shared files.** Do not hand-edit generated files (`Looks/`, `UIAssets.luau`, `wally.lock`); regenerate them. After a merge conflict in one, take either side and regenerate. `GAME.md`'s checklist has one writer at a time: tell the user before ticking boxes on a branch someone else also changed.
+- **Studio.** One Studio and MCP session per place. Do not start a playtest while the user's other session is running one.
+
 ## Code style
 
 - Do not add comments to code. Luau directives such as `--!strict` are allowed.

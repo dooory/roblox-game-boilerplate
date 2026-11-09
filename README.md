@@ -4,6 +4,8 @@ I made this boilerplate/template because I'm tired of people not using AI correc
 
 Ask your agent to set up the boilerplate by running the install scripts, and the rest is easy!
 
+New to the project? See [docs/getting-started.md](/docs/getting-started.md).
+
 <details>
 <summary>For AI agents:</summary>
 
