@@ -29,8 +29,7 @@ export type Packet<A... = (), B... = ()> = {
 	Deserialize: (self: Packet<A..., B...>, serializeBuffer: buffer, instances: { Instance }?) -> A...,
 }
 
-local Settings =
-	{ UseBuffers = true, DebugOutgoing = false, DebugOutgoingInterval = 5, DebugOutgoingTop = 10 }
+local Settings = { UseBuffers = true, DebugOutgoing = false, DebugOutgoingInterval = 5, DebugOutgoingTop = 10 }
 local ParametersToFunctions, TableToFunctions, ReadParameters, WriteParameters, Timeout, TryActivateChannel
 local RunService = game:GetService("RunService")
 local PlayersService = game:GetService("Players")
@@ -169,13 +168,7 @@ function Packet:Fire(...)
 			WriteU8(threads.Index)
 			threads[threads.Index] = {
 				Yielded = coroutine.running(),
-				Timeout = Task:Delay(
-					self.ResponseTimeout,
-					Timeout,
-					threads,
-					threads.Index,
-					self.ResponseTimeoutValue
-				),
+				Timeout = Task:Delay(self.ResponseTimeout, Timeout, threads, threads.Index, self.ResponseTimeoutValue),
 			}
 			threads.Index = (threads.Index + 1) % 128
 			WriteParameters(self.Writes, { ... })
@@ -206,13 +199,7 @@ function Packet:Fire(...)
 			end
 			threads[threads.Index] = {
 				Yielded = coroutine.running(),
-				Timeout = Task:Delay(
-					self.ResponseTimeout,
-					Timeout,
-					threads,
-					threads.Index,
-					self.ResponseTimeoutValue
-				),
+				Timeout = Task:Delay(self.ResponseTimeout, Timeout, threads, threads.Index, self.ResponseTimeoutValue),
 			}
 			remoteEvent:FireServer(self.Id, threads.Index, ...)
 			threads.Index = (threads.Index + 1) % 128
@@ -259,13 +246,7 @@ function Packet:FireClient(player, ...)
 			WriteU8(threads.Index)
 			threads[threads.Index] = {
 				Yielded = coroutine.running(),
-				Timeout = Task:Delay(
-					self.ResponseTimeout,
-					Timeout,
-					threads,
-					threads.Index,
-					self.ResponseTimeoutValue
-				),
+				Timeout = Task:Delay(self.ResponseTimeout, Timeout, threads, threads.Index, self.ResponseTimeoutValue),
 			}
 			threads.Index = (threads.Index + 1) % 128
 			WriteParameters(self.Writes, { ... })
@@ -307,13 +288,7 @@ function Packet:FireClient(player, ...)
 			end
 			threads[threads.Index] = {
 				Yielded = coroutine.running(),
-				Timeout = Task:Delay(
-					self.ResponseTimeout,
-					Timeout,
-					threads,
-					threads.Index,
-					self.ResponseTimeoutValue
-				),
+				Timeout = Task:Delay(self.ResponseTimeout, Timeout, threads, threads.Index, self.ResponseTimeoutValue),
 			}
 			remoteEvent:FireClient(player, self.Id, threads.Index, ...)
 			threads.Index = (threads.Index + 1) % 128

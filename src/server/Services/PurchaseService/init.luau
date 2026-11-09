@@ -52,9 +52,7 @@ local function processReceipt(receipt: { [string]: any }): Enum.ProductPurchaseD
 	local saved = dataService:WaitForSave(player, function(snapshot: any)
 		return type(snapshot.Receipts) == "table" and snapshot.Receipts[purchaseId] ~= nil
 	end)
-	return if saved
-		then Enum.ProductPurchaseDecision.PurchaseGranted
-		else Enum.ProductPurchaseDecision.NotProcessedYet
+	return if saved then Enum.ProductPurchaseDecision.PurchaseGranted else Enum.ProductPurchaseDecision.NotProcessedYet
 end
 
 function PurchaseService.Init(_self: any, services: { [string]: any })

@@ -704,10 +704,7 @@ end
 
 types.Region3 = ("Region3" :: any) :: Region3
 reads.Region3 = function()
-	return Region3.new(
-		Vector3.new(ReadF32(), ReadF32(), ReadF32()),
-		Vector3.new(ReadF32(), ReadF32(), ReadF32())
-	)
+	return Region3.new(Vector3.new(ReadF32(), ReadF32(), ReadF32()), Vector3.new(ReadF32(), ReadF32(), ReadF32()))
 end
 writes.Region3 = function(value: Region3)
 	local halfSize = value.Size / 2
@@ -747,10 +744,7 @@ reads.ColorSequence = function()
 	local length = ReadU8()
 	local keypoints = table.create(length)
 	for index = 1, length do
-		table.insert(
-			keypoints,
-			ColorSequenceKeypoint.new(ReadU8() / 255, Color3.fromRGB(ReadU8(), ReadU8(), ReadU8()))
-		)
+		table.insert(keypoints, ColorSequenceKeypoint.new(ReadU8() / 255, Color3.fromRGB(ReadU8(), ReadU8(), ReadU8())))
 	end
 	return ColorSequence.new(keypoints)
 end
@@ -1096,10 +1090,7 @@ anyWrites.CFrame = function(value: CFrame)
 end
 
 anyReads[24] = function()
-	return Region3.new(
-		Vector3.new(ReadF32(), ReadF32(), ReadF32()),
-		Vector3.new(ReadF32(), ReadF32(), ReadF32())
-	)
+	return Region3.new(Vector3.new(ReadF32(), ReadF32(), ReadF32()), Vector3.new(ReadF32(), ReadF32(), ReadF32()))
 end
 anyWrites.Region3 = function(value: Region3)
 	local halfSize = value.Size / 2
@@ -1139,10 +1130,7 @@ anyReads[26] = function()
 	local length = ReadU8()
 	local keypoints = table.create(length)
 	for index = 1, length do
-		table.insert(
-			keypoints,
-			ColorSequenceKeypoint.new(ReadU8() / 255, Color3.fromRGB(ReadU8(), ReadU8(), ReadU8()))
-		)
+		table.insert(keypoints, ColorSequenceKeypoint.new(ReadU8() / 255, Color3.fromRGB(ReadU8(), ReadU8(), ReadU8())))
 	end
 	return ColorSequence.new(keypoints)
 end

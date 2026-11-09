@@ -17,11 +17,7 @@ PlayerData.Template = {
 } :: Data
 
 local function natural(value: any): boolean
-	return type(value) == "number"
-		and value == value
-		and math.abs(value) < math.huge
-		and value >= 0
-		and value % 1 == 0
+	return type(value) == "number" and value == value and math.abs(value) < math.huge and value >= 0 and value % 1 == 0
 end
 
 function PlayerData.Validate(data: any): boolean
